@@ -14,7 +14,7 @@ from xml.dom.minidom import parseString
 from IPython import embed
 import logging
 
-LOG = logging.getLogger("dict2xml")
+LOG = logging.getLogger("xmler")
 
 class XmlTag(object):
 
@@ -73,7 +73,7 @@ class XmlTag(object):
             cls.__perinstance = True
         setattr(cls, name, property(method))
 
-def dict2xml(dic, encoding="UTF-8", customRoot="root", pretty=False):
+def xmler(dic, encoding="UTF-8", customRoot="root", pretty=False):
     """Converts a python dictionary into a valid XML string
 
     Args:
@@ -117,7 +117,7 @@ def dict2xml(dic, encoding="UTF-8", customRoot="root", pretty=False):
             }
         }
 
-        xml = dict2xml(dict, customRoot=False)
+        xml = xmler(dict, customRoot=False)
         print(xml)
         ```
 

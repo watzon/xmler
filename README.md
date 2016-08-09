@@ -1,10 +1,10 @@
 # What am I
 
-dict2xml is a python package for converting python dictionaries into valid XML. Most XML conversion utilities out there don't seem to provide any namespace support, which was my main reason for creating this package. Inspiration was drawn from the current most popular dictionary to  XML conversion utility [dicttoxml](https://github.com/quandyfactory/dicttoxml).
+xmler is a python package for converting python dictionaries into valid XML. Most XML conversion utilities out there don't seem to provide any namespace support, which was my main reason for creating this package. Inspiration was drawn from the current most popular dictionary to  XML conversion utility [dicttoxml](https://github.com/quandyfactory/dicttoxml).
 
 # Details
 
-dict2xml has a very specific api that it abides by and, for now, doesn't have very good error handling. Getting namespace support with python dictionaries is not easy so there may be some quirks.
+xmler has a very specific api that it abides by and, for now, doesn't have very good error handling. Getting namespace support with python dictionaries is not easy so there may be some quirks.
 
 To be used with this package your dictionary must be formatted in the following way:
 
@@ -159,16 +159,16 @@ myDict = {
 
 # Installation
 
-dict2xml is [published to PyPi](https://pypi.python.org/pypi/dict2xml), so installing it is as easy as:
+xmler is [published to PyPi](https://pypi.python.org/pypi/xmler), so installing it is as easy as:
 
 ```shell
-pip install dict2xml
+pip install xmler
 ```
 
 OR
 
 ```shell
-easy_install dict2xml
+easy_install xmler
 ```
 
 You can also download the installer as a tar archive and install it using python with:
@@ -181,7 +181,7 @@ python setup.py install
 
 + Author: Chris Watson
 + Email: chris@marginzero.co
-+ Repository: http://github.com/iDev0urer/dict2xml
++ Repository: http://github.com/iDev0urer/xmler
 
 # Version
 
