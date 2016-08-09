@@ -2,14 +2,11 @@ from distutils.core import setup
 
 version = '0.1.0'
 
-with open('README.md') as readme:
-    long_description = readme.read()
-
 setup(
     name = 'xmler',
     version = version,
     description = 'Converts a Python dictionary into a XML string with namespace support.',
-    long_description = long_description,
+    long_description = "Long description and usage instructions can be found at https://github.com/iDev0urer/xmler",
     author = 'Chris Watson',
     author_email = 'chris@marginzero.co',
     license = 'LICENCE',
