@@ -11,7 +11,6 @@ __version__ = '0.1.0'
 version = __version__
 
 from xml.dom.minidom import parseString
-from IPython import embed
 import logging
 
 LOG = logging.getLogger("xmler")
@@ -195,6 +194,3 @@ def parseDict(dic, root=None, pretty=False):
                 root = child
 
     return root.pretty_print() if pretty else root.to_string()
-
-if __name__ == '__main__':
-    embed()
