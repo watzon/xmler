@@ -35,17 +35,17 @@ class XmlTag(object):
 
         # Build the temp string based on whether or not the element has children
         if self.self_close and not has_children:
-            temp = "<{0}{1} />"
+            temp = "<{0}{1}/>"
         elif has_children:
-            temp = "<{0}{1} >{2}</{0}>"
+            temp = "<{0}{1}>{2}</{0}>"
         else:
-            temp = "<{0}{1} ></{0}>"
+            temp = "<{0}{1}></{0}>"
 
         # Iterate over the attributes and build a new string of attribute keys
         # to values like so: key="value"
         print(attrs)
         for key, attr in self.attributes.items():
-            attr_string = "%s=\"%s\"" % (key, attr)
+            attr_string = "%s=\"%s\" " % (key, attr)
             attrs = "%s %s" % (attrs, attr_string)
 
         # Loop through the children. If the child is a string we need to just
