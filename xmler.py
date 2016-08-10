@@ -80,7 +80,7 @@ def deep_to_dict(obj, namespace=None):
                 d = {}
 
 
-def xmler(dic, encoding="UTF-8", customRoot="root", pretty=False):
+def dict2xml(dic, encoding="UTF-8", customRoot="root", pretty=False):
     """Converts a python dictionary into a valid XML string
 
     Args:
@@ -124,7 +124,7 @@ def xmler(dic, encoding="UTF-8", customRoot="root", pretty=False):
             }
         }
 
-        xml = xmler(dict, customRoot=False)
+        xml = xml2dict(dict, customRoot=False)
         print(xml)
         ```
 
@@ -154,6 +154,8 @@ def xmler(dic, encoding="UTF-8", customRoot="root", pretty=False):
 
     return xml_string
 
+def xml2dict():
+    pass
 
 def parseDict(dic, root=None, pretty=False):
 
@@ -171,7 +173,11 @@ def parseDict(dic, root=None, pretty=False):
             elif option == "attrs":
                 root.attributes = value
             elif option == "value":
-                root.children.append(value)
+                if type(value) is dict:
+                    v = parseDict(value)
+                    root.children.append(v)
+                else:
+                    root.children.append(value)
             else:
                 print("Property %s does not exist on type XmlTag" % option)
 
