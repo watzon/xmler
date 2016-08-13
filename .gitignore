@@ -2,3 +2,5 @@
 *.log
 .pypirc
 build/*
+xmler/*
+MANIFEST
