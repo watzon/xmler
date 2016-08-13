@@ -9,7 +9,7 @@ xmler has a very specific api that it abides by and, for now, doesn't have very 
 To be used with this package your dictionary must be formatted in the following way:
 
 ```python
-import xmler from xmler
+import dict2xml from xmler
 
 myDict = {
 	"RootTag": {						# The root tag. Will not necessarily be root. (see #customRoot)
@@ -26,7 +26,7 @@ myDict = {
 	}
 }
 
-print(xmler(myDict, pretty=True, customRoot=None))
+print(dict2xml(myDict, pretty=True, customRoot=None))
 ```
 
 Which will return the following XML:
