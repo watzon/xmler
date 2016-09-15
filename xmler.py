@@ -77,9 +77,6 @@ def dict2xml(dict, encoding="utf-8", pretty=False):
         ```
     """
 
-    import ipdb;
-    ipdb.set_trace()
-
     xml_string = tostring(parse(dict, pretty=pretty), encoding=encoding)
 
     if pretty:
