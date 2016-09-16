@@ -3,4 +3,5 @@
 .pypirc
 build/*
 xmler/*
+dist/*
 MANIFEST
