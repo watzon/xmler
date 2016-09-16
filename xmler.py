@@ -7,80 +7,15 @@ Converts a Python dictionary to a valid XML string
 
 from __future__ import unicode_literals
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 version = __version__
 
-from xml.dom.minidom import parseString
+from xml.dom import minidom
+from xml.etree.ElementTree import Element, tostring
+
 import logging
 
-LOG = logging.getLogger("xmler")
-
-class XmlTag(object):
-
-    def __init__(self, name="key", children=None, namespace=None,
-                attributes=None, self_close=True):
-        self.name = name
-        self.children = children if children else []
-        self.namespace = namespace
-        self.attributes = attributes if attributes else {}
-        self.self_close = self_close
-
-    def to_string(self):
-
-        attrs = ""
-        children = ""
-        name = "%s:%s" % (self.namespace, self.name) if self.namespace else self.name
-        has_children = len(self.children) > 0
-
-        # Build the temp string based on whether or not the element has children
-        if self.self_close and not has_children:
-            temp = "<{0}{1}/>"
-        elif has_children:
-            temp = "<{0}{1}>{2}</{0}>"
-        else:
-            temp = "<{0}{1}></{0}>"
-
-        # Iterate over the attributes and build a new string of attribute keys
-        # to values like so: key="value"
-        print(attrs)
-        for key, attr in self.attributes.items():
-            attr_string = "%s=\"%s\" " % (key, attr)
-            attrs = "%s %s" % (attrs, attr_string)
-
-        # Loop through the children. If the child is a string we need to just
-        # add it, but if it's an instance of XmlTag we need to call the format
-        # function and add that
-        for child in self.children:
-            if (type(child) is str):
-                children = "%s%s" % (children, child)
-            elif(type(child) is XmlTag):
-                children = "%s%s" % (children, child.to_string())
-
-        if has_children:
-            return temp.format(name, attrs, children)
-        else:
-            return temp.format(name, attrs)
-
-    def pretty_print(self):
-        "Pretty prints the output"
-        return parseString(self.to_string()).toprettyxml()
-
-    def addprop(self, name, method):
-        cls = type(self)
-        if not cls.hasattr('__perinstance'):
-            cls = type(cls.__name__, (cls,), {})
-            cls.__perinstance = True
-        setattr(cls, name, property(method))
-
-def deep_to_dict(obj, namespace=None):
-    for key, value in obj.items():
-        is_option = key[0] == "@"
-        if not is_option:
-            if type(value) is not dict:
-                d = {}
-
-
-def dict2xml(dic, encoding="UTF-8", customRoot="root", pretty=False):
+def dict2xml(dict, encoding="utf-8", pretty=False):
     """Converts a python dictionary into a valid XML string
 
     Args:
@@ -142,61 +77,50 @@ def dict2xml(dic, encoding="UTF-8", customRoot="root", pretty=False):
         ```
     """
 
-    root = None
-    if customRoot:
-        if type(customRoot) is str:
-            root = XmlTag(name=customRoot)
-        elif type(customRoot) is dict:
-            root = parseDict(customRoot)
+    xml_string = tostring(parse(dict, pretty=pretty), encoding=encoding)
 
-    encoding_string = "<?xml version=\"1.0\" encoding=\"{0}\"?>".format(encoding) if encoding else ""
-    xml_string = encoding_string + parseDict(dic, root=root, pretty=pretty)
+    if pretty:
+        xml_pretty_string = minidom.parseString(xml_string)
+        return xml_pretty_string.toprettyxml().decode(encoding)
+    else:
+        return xml_string.decode(encoding)
 
-    return xml_string
 
-def xml2dict():
-    pass
+def parse(dict, parent={}, pretty=False):
 
-def parseDict(dic, root=None, pretty=False):
+    for key, value in dict.items():
 
-    for key, value in dic.items():
+        if '@ns' in value:
+            parent['namespace'] = value['@ns']
+            value.pop('@ns')
 
-        child = XmlTag()
-        is_option = key[0] == "@"
+        if '@attrs' in value:
+            parent['attributes'] = value['@attrs']
+            value.pop('@attrs')
 
-        if is_option:
-            option = key[1:]
-            if option == "ns":
-                root.namespace = value
-            elif option == "name":
-                root.name = value
-            elif option == "attrs":
-                root.attributes = value
-            elif option == "value":
-                if type(value) is dict:
-                    v = parseDict(value)
-                    root.children.append(v)
-                else:
-                    root.children.append(value)
-            else:
-                print("Property %s does not exist on type XmlTag" % option)
-
-        elif type(value) is dict:
-            child.name = key
-            child2 = parseDict(value, root=child)
-
-            if root:
-                root.children.append(child2)
-            else:
-                root = child
-
+        if '@name' in value:
+            parent['name'] = value['@name']
+            value.pop('@name')
         else:
-            child.name = key
-            child.children.append(value)
+            parent['name'] = key
 
-            if root:
-                root.children.append(child)
-            else:
-                root = child
+        if '@value' in value:
+            parent['value'] = value = value['@value']
+        else:
+            parent['value'] = value
 
-    return root.pretty_print() if pretty else root.to_string()
+    if 'namespace' in parent:
+        parent['name'] = "%s:%s" % (parent['namespace'], parent['name'])
+
+    if 'attributes' in parent:
+        element = Element(parent['name'], parent['attributes'])
+    else:
+        element = Element(parent['name'])
+
+    if isinstance(parent['value'], str):
+        element.text = parent['value']
+    else:
+        for child_key, child_value in value.items():
+            element.append(parse({child_key: child_value}, parent={}))
+
+    return element
