@@ -15,7 +15,7 @@ myDict = {
 	"RootTag": {						# The root tag. Will not necessarily be root. (see #customRoot)
 		"@ns": "soapenv",			# The namespace for the RootTag. The RootTag will appear as <soapenv:RootTag ...>
 		"@attrs": {						# @attrs takes a dictionary. each key-value pair will become an attribute
-			{ "xmlns:soapenv": "http://schemas.xmlsoap.org/soap/envelope/" }
+			"xmlns:soapenv": "http://schemas.xmlsoap.org/soap/envelope/"
 		},
 		"childTag": {
 			"@attrs": {
